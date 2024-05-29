@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Calculator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #d6eaf8, #f9e79f);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        input[type="text"], input[type="number"] {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .item {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">BILL CALCULATOR</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Details</h1>
+                <div id="itemsContainer">
+                    <div class="item">
+                        <input type="text" class="itemName" value="Item A" readonly>
+                        <input type="number" class="itemQuantity" placeholder="Quantity" min="0" value="0">
+                    </div>
+                    <div class="item">
+                        <input type="text" class="itemName" value="Item B" readonly>
+                        <input type="number" class="itemQuantity" placeholder="Quantity" min="0" value="0">
+                    </div>
+                    <div class="item">
+                        <input type="text" class="itemName" value="Item C" readonly>
+                        <input type="number" class="itemQuantity" placeholder="Quantity" min="0" value="0">
+                    </div>
+                </div>
+                <button id="calculate" class="btn btn-success btn-block">Calculate Total</button>
+            </div>
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Total</h1>
+                <div id="total" class="mb-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('calculate').addEventListener('click', function() {
+            var items = document.querySelectorAll('.itemQuantity');
+            var total = 0;
+            var totalHTML = '<table class="table"><thead><tr><th>Item Name</th><th>Price (₹)</th><th>Quantity</th><th>Subtotal (₹)</th></tr></thead><tbody>';
+            items.forEach(function(item, index) {
+                var itemName;
+                switch (index) {
+                    case 0:
+                        itemName = 'Item A';
+                        break;
+                    case 1:
+                        itemName = 'Item B';
+                        break;
+                    case 2:
+                        itemName = 'Item C';
+                        break;
+                    default:
+                        break;
+                }
+                var itemPrice = getItemPrice(itemName);
+                var itemQuantity = parseInt(item.value) || 0; 
+                var subtotal = itemPrice * itemQuantity;
+                if (!isNaN(itemPrice) && !isNaN(itemQuantity) && itemPrice > 0 && itemQuantity >= 0) {
+                    total += subtotal;
+                    totalHTML += `<tr><td>${itemName}</td><td>${itemPrice.toFixed(2)}</td><td>${itemQuantity}</td><td>${subtotal.toFixed(2)}</td></tr>`;
+                }
+            });
+            totalHTML += `</tbody><tfoot><tr><td colspan="3">Total</td><td>${total.toFixed(2)}</td></tr></tfoot></table>`;
+            document.getElementById('total').innerHTML = totalHTML;
+        });
+
+        function getItemPrice(itemName) {
+            switch (itemName) {
+                case 'Item A':
+                    return 10;
+                case 'Item B':
+                    return 20;
+                case 'Item C':
+                    return 30;
+                default:
+                    return 0;
+            }
+        }
+    </script>
+</body>
+</html>
